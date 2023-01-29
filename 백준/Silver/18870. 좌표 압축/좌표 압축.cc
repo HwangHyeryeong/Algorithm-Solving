@@ -1,32 +1,26 @@
 #include <iostream>
 #include <vector>
-#include <map>
+#include <algorithm>
 using namespace std;
 
 int main() {
 	std::ios_base::sync_with_stdio(false); std::cin.tie(NULL); std::cout.tie(NULL);
 
 	int n; cin >> n;
-	
-	map<int, int> x;
-	vector<int> locX;
+
+	vector<int> locX(n);
+	vector<int> copy(n);
 	for (int i = 0; i < n; i++) {
-		int tmp; cin >> tmp;
-		locX.push_back(tmp);
-		x.insert({tmp, -1});
+		cin >> locX[i];
+		copy[i] = locX[i];
 	}
+	sort(copy.begin(), copy.end());
+	copy.erase(unique(copy.begin(), copy.end()), copy.end());
 
-	int order = 0;
-	for (auto i : x) {
-		i.second = order;
-		x[i.first] = order;
-		order++;
-
-	}
-	
 	for (int i = 0; i < n; i++) {
-		cout << x[locX[i]] << " ";
+		auto index = lower_bound(copy.begin(), copy.end(), locX[i]);
+		cout << index - copy.begin() << " ";
 	}
 
-	return 0;	
+	return 0;
 }
