@@ -1,49 +1,26 @@
 #include <iostream>
-#include <vector>
 #include <stack>
 using namespace std;
 
 int main() {
-	int n; cin >> n;
-	vector<long long> tower(n + 1, 0);
-	stack<long long> hieght, s;
+	std::ios_base::sync_with_stdio(false); std::cin.tie(NULL); std::cout.tie(NULL);
 
+	int n, h = 0; 
+	cin >> n;
+	stack<pair<int, int>> tower;
 	for (int i = 1; i <= n; i++) {
-		cin >> tower[i];
-		hieght.push(i);
-	}
-
-	int now = 0;
-	while (!hieght.empty()) {
-		now = hieght.top();
-		hieght.pop();
-
-		if (hieght.empty()) {
-			tower[now] = 0;
-		}
-		else if (tower[now] <= tower[hieght.top()]) {
-			tower[now] = hieght.top();
-			while (!s.empty()) {
-				if (tower[s.top()] > tower[hieght.top()])
-					break;
-				else {
-					tower[s.top()] = hieght.top();
-					s.pop();
-				}
+		cin >> h;
+		while (!tower.empty()) {
+			if (h < tower.top().second) {
+				cout << tower.top().first << " ";
+				break;
 			}
+			tower.pop();
 		}
-		else {
-			s.push(now);
+		if (tower.empty()) {
+			cout << 0 << " ";
 		}
-	}
-
-	while (!s.empty()) {
-		tower[s.top()] = 0;
-		s.pop();
-	}
-
-	for (int i = 1; i <= n; i++) {
-		cout << tower[i] << " ";
+		tower.push({i, h});
 	}
 
 	return 0;
