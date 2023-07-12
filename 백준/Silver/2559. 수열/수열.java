@@ -11,18 +11,19 @@ public class Main {
 		int k = Integer.parseInt(st.nextToken());
 		st = new StringTokenizer(br.readLine());
 		
-		int[] temp = new int[n];
-		int sum = 0;
-		for(int i = 0; i < k; i++) {
+		int[] temp = new int[n + 1];
+		int sum = 0, max = -9999;
+		for(int i = 1; i <= n; i++) {
 			temp[i] = Integer.parseInt(st.nextToken());
-			sum += temp[i];
-		}
-		
-		int max = sum;
-		for(int i = 0, j = k; j < n; i++, j++) {
-			temp[j] = Integer.parseInt(st.nextToken());
-			sum = sum - temp[i] + temp[j];
-			max = (max > sum)? max : sum;
+			
+			if(i >= k) {
+				sum = sum - temp[i - k] + temp[i];
+				max = (max > sum)? max: sum;
+			}
+			else {
+				sum += temp[i];
+			}
+			
 		}
 		System.out.println(max);
 	}
