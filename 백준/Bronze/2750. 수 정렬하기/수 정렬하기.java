@@ -6,47 +6,39 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		int n = sc.nextInt();
 		int[] arr = new int[n];
-
+		int[] sorted = new int[n];
 		for(int i = 0; i < n; i++)
 			arr[i] = sc.nextInt();
 
-		quickSort(arr, 0, n - 1);
+		mergeSort(arr, 0, n - 1, sorted);
 		
 		for(int i : arr)
 			System.out.println(i);
 	}
-
-	static void swap(int[] arr, int i, int j) {
-		int tmp = arr[i];
-		arr[i] = arr[j];
-		arr[j] = tmp;
-	}
 	
-	static void quickSort(int[] arr, int left, int right) {
+	static void mergeSort(int[] arr, int left, int right, int[] sorted) {
 		if(left >= right) return;
 		
-		int pivot = partition(arr, left, right);
+		int mid = (left + right) / 2;
 		
-		quickSort(arr, left, pivot - 1);
-		quickSort(arr, pivot + 1, right);		
+		mergeSort(arr, left, mid, sorted);
+		mergeSort(arr, mid+1, right, sorted);
+		
+		merge(arr, left, right, mid, sorted);		
 	}
 	
-	static int partition(int[] arr, int pivot, int high) {
-		int left = pivot + 1;
-		int right = high;
+	static void merge(int[] arr, int left, int right, int mid, int[] sorted) {
+		int pl = left, pr = mid + 1, pc = left;
 		
-		while(true) {
-			while(left < high && arr[left] < arr[pivot])
-				left++;
-			while(right > pivot && arr[right] > arr[pivot])
-				right--;
-			
-			if(left >= right) break;
-			
-			swap(arr, left++, right--);
-		}
-		swap(arr, pivot, right);
+		while(pl <= mid && pr <= right) 
+			sorted[pc++] = (arr[pl] <= arr[pr])? arr[pl++] : arr[pr++];
 		
-		return right;
+		while(pl <= mid)
+			sorted[pc++] = arr[pl++];
+		while(pr <= right)
+			sorted[pc++] = arr[pr++];
+		
+		for(int i = left; i <= right; i++)
+			arr[i] = sorted[i];
 	}
 }
