@@ -3,11 +3,7 @@ class Solution {
         int[] dx = {-1, 0, 1, -1, 1, -1, 0, 1};
         int[] dy = {-1, -1, -1, 0, 0, 1, 1, 1};
         int n = board[0].length;
-        
-        if(n == 1){
-            return (board[0][0] == 1)? 0 : 1;
-        }
-        
+               
         int answer = 0;
         for(int i = 0; i < n; i++){
             for(int j = 0; j < n; j++){
