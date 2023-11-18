@@ -1,71 +1,69 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
     static int n, m;
-    static char[][] graph;
+    static char[][] maze;
     static int[][] dist;
     static boolean[][] visited;
-    static int[] dx = {-1, 0, 1, 0};
-    static int[] dy = {0, -1, 0, 1};
-
-    public static void main(String[] args) throws IOException {
+    
+    static int[] dr = {-1, 0, 1, 0};
+    static int[] dc = {0, -1, 0, 1};
+    
+	public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
-        graph = new char[n][m];
-        visited = new boolean[n][m];
+        
+        maze = new char[n][m];
         dist = new int[n][m];
-
+        visited = new boolean[n][m];
+        
         for(int i = 0; i < n; i++){
             String tmp = br.readLine();
-            graph[i] = tmp.toCharArray();
+            maze[i] = tmp.toCharArray();
         }
-
+        
         bfs(0, 0);
-
-        System.out.println(dist[n-1][m-1]);
-    }
-
-    static void bfs(int x, int y){
-        Queue<Loc> q = new LinkedList<>();
-
-        visited[x][y] = true;
-        dist[x][y] = 1;
-        q.add(new Loc(x, y));
-
-        while(!q.isEmpty()){
-            int curX = q.peek().x;
-            int curY = q.peek().y;
-            q.poll();
-
-            for(int i = 0; i < 4; i++){
-                int nextX = curX + dx[i];
-                int nextY = curY + dy[i];
-
-                if(nextX >= 0 && nextX < m && nextY >= 0 && nextY < n){
-                    if(!visited[nextY][nextX] && graph[nextY][nextX] == '1'){
-                        visited[nextY][nextX] = true;
-                        dist[nextY][nextX] = dist[curY][curX] + 1;
-                        q.add(new Loc(nextX, nextY));
-                    }
-                }
-            }
-        }
-    }
+        
+        System.out.println(dist[n - 1][m - 1]);
+	}
+	
+	static void bfs(int r, int c){
+	    Queue<Point> q = new LinkedList<>();
+	    
+	    visited[r][c] = true;
+	    dist[r][c] = 1;
+	    q.add(new Point(r, c));
+	    
+	    while(!q.isEmpty()){
+	        int curR = q.peek().r;
+	        int curC = q.peek().c;
+	        q.poll();
+	        
+	        for(int i = 0; i < 4; i++){
+	            int nextR = curR + dr[i];
+	            int nextC = curC + dc[i];
+	            
+	            if(isValid(nextR, nextC) && !visited[nextR][nextC] && maze[nextR][nextC] == '1'){
+	                visited[nextR][nextC] = true;
+	                dist[nextR][nextC] = dist[curR][curC] + 1;
+	                q.add(new Point(nextR, nextC));
+	            }
+	        }
+	    }
+	}
+	
+	static boolean isValid(int r, int c){
+	    return r >= 0 && r < n && c >= 0 && c < m;
+	}
 }
 
-class Loc{
-    int x;
-    int y;
-
-    Loc(int x, int y){
-        this.x = x;
-        this.y = y;
-    }
-}
+class Point{
+	    int r, c;
+	    Point(int r, int c){
+	        this.r = r;
+	        this.c = c;
+	    }
+	}
