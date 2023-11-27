@@ -4,36 +4,40 @@
 #include <algorithm>
 using namespace std;
 
-int main() {
-    int t; cin >> t;
+#define MAX 10001
+#define MIN 0
 
-    while (t--) {
+int main(){
+    int t; cin >> t;
+    
+    while(t--){
         string w; cin >> w;
         int k; cin >> k;
-
-        bool isFound = false;
+        
+        bool find = false;
         vector<int> alphabet[26];
-        for (int i = 0; i < w.length(); i++) {
+        for(int i = 0; i < w.length(); i++){
             alphabet[w[i] - 'a'].push_back(i);
-            isFound = isFound || (alphabet[w[i] - 'a'].size() >= k);
+            
+            find = find || (alphabet[w[i] - 'a'].size() >= k);
         }
-
-        if (!isFound) cout << -1 << endl;
-        else {
-            int shortest = 10001, longest = 0;
-            for (int i = 0; i < 26; i++) {
-                int size = alphabet[i].size();
-                if (size >= k) {
-                    for (int j = 0; j <= size - k; j++) {
-                        shortest = min(shortest, alphabet[i][j + k - 1] - alphabet[i][j] + 1);
-                        longest = max(longest, alphabet[i][j + k - 1] - alphabet[i][j] + 1);
-                    }
-                }
+        
+        if(!find){
+            cout << -1 << endl;
+            continue;
+        }
+        
+        int s = 10001, l = 0;
+        for(int i = 0; i < 26; i++){
+            if(alphabet[i].size() < k) continue;
+            
+            for(int j = k - 1; j < alphabet[i].size(); j++){
+                s = min(s, alphabet[i][j] - alphabet[i][j - k + 1] + 1);
+                l = max(l, alphabet[i][j] - alphabet[i][j - k + 1] + 1);
             }
-
-            cout << shortest << " " << longest << endl;
         }
+        cout << s << " " << l << endl;
     }
-
+    
     return 0;
 }
