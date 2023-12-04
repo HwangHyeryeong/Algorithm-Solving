@@ -3,56 +3,50 @@
 #include <algorithm>
 using namespace std;
 
-
 int main(){
     int cash; cin >> cash;
-    vector<int> stock(14, 0);
-
-    int jhStock = 0, smStock = 0, jhMoney = cash, smMoney = cash;
+    vector<int> price(14, 0);
+    
     int decline = 0, rise = 0;
+    int smMoney = cash, smStock = 0, jhMoney = cash, jhStock = 0;
     for(int i = 0; i < 14; i++){
-        cin >> stock[i];
+        cin >> price[i];
         
         if(i > 0){
-            if(stock[i] > stock[i-1]){
-                decline = 0;
-                rise++;
+            if(price[i] > price[i - 1]) {
+                rise++; decline = 0;
             }
-            else if(stock[i] < stock[i - 1]){
-                rise = 0;
-                decline++;
+            else if(price[i] < price[i - 1]) {
+                decline++; rise = 0;
             }
             else{
-                decline = 0;
-                rise = 0;
+                decline = 0; rise = 0;
             }
         }
         
-        if(jhMoney >= stock[i]){
-            int cnt = jhMoney / stock[i];
+        if(jhMoney >= price[i]){
+            int cnt = jhMoney / price[i];
             jhStock += cnt;
-            jhMoney -= cnt * stock[i];
+            jhMoney -= cnt * price[i];
         }
         
         if(decline == 3){
-            if(smMoney >= stock[i]){
-                int cnt = smMoney / stock[i];
-                smStock += cnt;
-                smMoney -= cnt * stock[i];
-            }
+            int cnt = smMoney / price[i];
+            smStock += cnt;
+            smMoney -= cnt * price[i];
         }
         else if(rise == 3){
-            smMoney += smStock * stock[i];
+            smMoney += smStock * price[i];
             smStock = 0;
         }
     }
     
-    jhMoney += jhStock * stock[13];
-    smMoney += smStock * stock[13];
+    smMoney += smStock * price[13];
+    jhMoney += jhStock * price[13];
     
-    if(jhMoney > smMoney) cout << "BNP";
-    else if(jhMoney < smMoney) cout << "TIMING";
-    else cout <<"SAMESAME";
+    if(smMoney > jhMoney) cout << "TIMING";
+    else if(smMoney < jhMoney) cout << "BNP";
+    else cout << "SAMESAME";
     
     return 0;
 }
