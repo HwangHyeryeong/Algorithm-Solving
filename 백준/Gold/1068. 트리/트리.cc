@@ -2,47 +2,46 @@
 #include <vector>
 using namespace std;
 
-vector<int> tree[51];
-bool visited[51] = { 0 };
+int cnt = 0, del;
+vector<vector<int>> tree;
 
-void getNumOfLeaf(int top, int del, int& count) {
-	if (visited[top] || top == del) return;
-	
-	visited[top] = true;
+void dfs(int node){
+    if(node == del){
+        return;
+    }
 
-	//자식노드인 경우
-	if (tree[top].size() == 0){
-		count++;
-		return;
-	}
-
-	//dfs
-	for (int i = 0; i < tree[top].size(); i++) {
-		int x = tree[top][i];
-		if (!visited[x] && x != del)
-			getNumOfLeaf(x, del, count);
-		else if (x == del && tree[top].size() == 1)
-			count++;
-	}
+    if(tree[node].size() == 0){
+        cnt++; 
+        return;
+    }
+    
+    for(int next : tree[node]){
+        if(next == del && tree[node].size() == 1){
+            cnt++;
+            continue;
+        }
+        dfs(next);
+    }
 }
 
-int main() {
-	int n;
-	cin >> n;
-
-	int top = -1;
-	for (int i = 0; i < n; i++) {
-		int parent; cin >> parent;
-		if (parent == -1)
-			top = i;
-		else
-			tree[parent].push_back(i);
-	}
-
-	int del; cin >> del;
-	int count = 0;
-	getNumOfLeaf(top, del, count);
-	cout << count << '\n';
-
-	return 0;
+int main(){
+    int n; cin >> n;
+    tree = vector<vector<int>>(n);
+    
+    int root = 0;
+    for(int i = 0; i < n; i++){
+        int parent; cin >> parent;
+        if(parent == -1){
+            root = i;
+            continue;
+        }
+        
+        tree[parent].push_back(i);
+    }
+    cin >> del;
+    
+    dfs(root);
+    cout << cnt;
+    
+    return 0;
 }
